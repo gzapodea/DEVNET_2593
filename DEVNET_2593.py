@@ -69,7 +69,8 @@ def main():
         # configure basic logging to send to stdout, level DEBUG, include timestamps
         logging.basicConfig(level=logging.DEBUG, stream=sys.stdout, format=('%(asctime)s - %(levelname)s - %(message)s'))
 
-    meraki_apis.get_organizations()
+
+
 
 
 
