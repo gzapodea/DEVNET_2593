@@ -1,42 +1,30 @@
-
 # developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
 
 
 # !/usr/bin/env python3
 
 
-
-import spark_apis
-import meraki_apis
-import utils
 import logging
 import sys
-
-import json
-import select
-import requests
 import time
+
 import requests.packages.urllib3
-import PIL
-import os
-import os.path
-
-
-from PIL import Image, ImageDraw, ImageFont
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-from requests.auth import HTTPBasicAuth  # for Basic Auth
+
+import meraki_apis
+import spark_apis
+import utils
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable insecure https warnings
 
 # import Meraki API info
 
-from DEVNET_2593_init import MERAKI_URL, MERAKI_API_KEY, MERAKI_ORG, MERAKI_NETWORK
-from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_DEVICE_SN, MERAKI_GUEST_SSID
+from DEVNET_2593_init import MERAKI_ORG, MERAKI_NETWORK
+from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SSID
 
 # import Spark API info
 
-from DEVNET_2593_init import SPARK_URL, SPARK_AUTH, SPARK_TEAM, SPARK_ROOM, SPARK_EMAIL
-
+from DEVNET_2593_init import SPARK_TEAM, SPARK_ROOM, SPARK_EMAIL
 
 
 def main():
@@ -56,7 +44,6 @@ def main():
     # this section will determine if running the code in demo mode or logging debug to a file
 
     if user_input == 'y':
-
         # open a log file 'DEVNET_2593.log'
         file_log = open('DEVNET_2593.log', 'w')
 
@@ -102,14 +89,14 @@ def main():
     if spark_team_id is None:
         spark_team_id = spark_apis.create_team(SPARK_TEAM)
         print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
-    spark_apis.add_team_membership(SPARK_TEAM,SPARK_EMAIL)
-    print('\nAdded membership to the team ',SPARK_TEAM)
+    spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
+    print('\nAdded membership to the team ', SPARK_TEAM)
 
     # check if we have the Spark space created
     spark_room_id = None
     spark_room_id = spark_apis.get_room_id(SPARK_ROOM)
     if spark_room_id is None:
-        spark_room_id = spark_apis.create_room(SPARK_ROOM,SPARK_TEAM)
+        spark_room_id = spark_apis.create_room(SPARK_ROOM, SPARK_TEAM)
         print('\nCreated the Spark Space with the name: ', SPARK_ROOM)
 
     # infinite loop to check client status every minute
@@ -131,8 +118,9 @@ def main():
                 print('\nWelcome! The "MerakiConnect" SSID is enabled')
             else:
                 meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
-                spark_apis.post_room_message(SPARK_ROOM,'Good Bye Gabi! The "MerakiConnect" SSID is disabled')
-        print('App is running normal, client current status', new_client_status, ', client previous status', client_status)
+                spark_apis.post_room_message(SPARK_ROOM, 'Good Bye Gabi! The "MerakiConnect" SSID is disabled')
+        print('App is running normal, client current status', new_client_status, ', client previous status',
+              client_status)
         client_status = new_client_status
         time.sleep(60)
 

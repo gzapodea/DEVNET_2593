@@ -1,17 +1,15 @@
-
 # developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
 
 # !/usr/bin/env python3
 
 # this module includes common utilized functions to create applications using Meraki APIs
 
-import requests
 import json
-import utils
+
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 from DEVNET_2593_init import MERAKI_API_KEY, MERAKI_URL
-
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable insecure https warnings
 
@@ -170,16 +168,16 @@ def get_all_mac_clients(org_name, netw_name, timespan):
     :return: list with all the client info
     """
 
-    meraki_sn_list = get_sn_network_devices(org_name,netw_name)
+    meraki_sn_list = get_sn_network_devices(org_name, netw_name)
     client_mac_list = []
     for sn in meraki_sn_list:
         clients = get_clients(sn, timespan)
         for client in clients:
-             client_mac_list.append(client['mac'])
+            client_mac_list.append(client['mac'])
     return client_mac_list
 
 
-def get_user_cell(users_info, email):
+def get_user_cell(users_info, user_email):
     """
     This function will look up the user cell phone based on his email
     :param users_info: List of all the users info
@@ -189,7 +187,7 @@ def get_user_cell(users_info, email):
 
     user_cell = None
     for user in users_info:
-        if user['email'] == email:
+        if user['email'] == user_email:
             user_cell = user['cell']
     return user_cell
 
@@ -254,7 +252,7 @@ def enable_ssid(org_name, netw_name, ssid_name):
     header = {'content-type': 'application/json', 'X-Cisco-Meraki-API-Key': MERAKI_API_KEY}
     enable_ssid_response = requests.put(url, data=json.dumps(payload), headers=header, verify=False)
     enable_ssid_json = enable_ssid_response.json()
-    if enable_ssid_json['enabled'] == True:
+    if enable_ssid_json['enabled']:
         ssid_status = 'Enabled'  # return Enabled status
     else:
         ssid_status = 'Disabled'  # return Disabled status
@@ -281,10 +279,8 @@ def disable_ssid(org_name, netw_name, ssid_name):
     header = {'content-type': 'application/json', 'X-Cisco-Meraki-API-Key': MERAKI_API_KEY}
     enable_ssid_response = requests.put(url, data=json.dumps(payload), headers=header, verify=False)
     enable_ssid_json = enable_ssid_response.json()
-    if enable_ssid_json['enabled'] == True:
+    if enable_ssid_json['enabled']:
         ssid_status = 'Enabled'  # return Enabled status
     else:
-        ssid_status = 'Disabled'   # return Disabled status
+        ssid_status = 'Disabled'  # return Disabled status
     return ssid_status
-
-

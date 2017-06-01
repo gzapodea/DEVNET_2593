@@ -5,19 +5,14 @@
 # this module includes common utilized utility functions
 
 import json
-import sys
-import select
-import requests
-import time
-import requests.packages.urllib3
-import PIL
 import os
 import os.path
+import select
+import sys
 
-
+import requests.packages.urllib3
 from PIL import Image, ImageDraw, ImageFont
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-from requests.auth import HTTPBasicAuth  # for Basic Auth
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable insecure https warnings
 
@@ -96,5 +91,5 @@ def image_annotate(in_image, out_image, text, color, font_size, x, y):
     draw = ImageDraw.Draw(image)  # edit image to annotate
     fonts_folder = '/Library/Fonts'  # for MAC OS X - folder with the fonts
     arial_font = ImageFont.truetype(os.path.join(fonts_folder, 'Arial Black.ttf'), font_size)  # select the font and size
-    draw.text((x,y), text, fill=color, font=arial_font)  # annotate with text
-    image.save(out_image,'PNG')  # save new image
+    draw.text((x, y), text, fill=color, font=arial_font)  # annotate with text
+    image.save(out_image, 'PNG')  # save new image
