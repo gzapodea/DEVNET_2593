@@ -93,3 +93,4 @@ def image_annotate(in_image, out_image, text, color, font_size, x, y):
     arial_font = ImageFont.truetype(os.path.join(fonts_folder, 'Arial Black.ttf'), font_size)  # select the font and size
     draw.text((x, y), text, fill=color, font=arial_font)  # annotate with text
     image.save(out_image, 'PNG')  # save new image
+
