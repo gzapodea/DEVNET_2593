@@ -67,7 +67,7 @@ def main():
 
     spark_apis.post_room_message(SPARK_ROOM, spark_message)
 
-    print('\nEnd of Application Run')
+    print('\n\nEnd of Application Run \n')
 
 
 if __name__ == '__main__':
