@@ -1,5 +1,5 @@
 .idea
-/modules_init.py
+/DEVNET_2593_init.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -90,5 +90,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
-/DEVNET_2593_init.py
-.idea/
+
