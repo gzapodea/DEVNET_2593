@@ -19,6 +19,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable in
 
 # import Meraki API info
 
+from DEVNET_2593_init import MERAKI_API_KEY, MERAKI_URL
 from DEVNET_2593_init import MERAKI_ORG, MERAKI_NETWORK
 from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SSID
 

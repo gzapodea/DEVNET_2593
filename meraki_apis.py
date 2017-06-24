@@ -5,13 +5,13 @@
 # this module includes common utilized functions to create applications using Meraki APIs
 
 import json
-
 import requests
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from DEVNET_2593_init import MERAKI_API_KEY, MERAKI_URL
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable insecure https warnings
+
 
 
 def get_organizations():

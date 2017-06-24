@@ -34,7 +34,7 @@ def main():
 
     # create a new Spark Team?
 
-    print('\nSpark Team to be create with the name : ', SPARK_TEAM, '\n')
+    print('\nSpark Team to be created with the name : ', SPARK_TEAM, '\n')
 
     new_team = input('Do you want to create a new Spark Team ? (y/n): ').upper()
     if new_team == 'Y':
@@ -42,7 +42,7 @@ def main():
 
     # create a new Spark Room?
 
-    print('\nSpark Room to be create with the name : ', SPARK_ROOM, '\n')
+    print('\nSpark Room to be created with the name : ', SPARK_ROOM, '\n')
 
     new_room = input('Do you want to create a new Spark Room ? (y/n): ').upper()
     if new_room == 'Y':
