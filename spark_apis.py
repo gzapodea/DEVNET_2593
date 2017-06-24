@@ -8,6 +8,7 @@
 import requests
 import json
 import requests.packages.urllib3
+import utils
 
 from requests_toolbelt import MultipartEncoder  # required to encode messages uploaded to Spark
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -120,6 +121,29 @@ def add_team_membership(team_name, email_invite):
     return membership
 
 
+def add_room_membership(room_name, email_invite):
+    """
+    This function will add membership to the Spark room with the name {room_name}
+    Calls to: It will call first the function get_room_id(room_name) to find out the room id
+              Spark - /memberships to add membership
+    :param room_name: The Spark room name
+    :param email_invite: Spark user email to add to the team
+    :return: status for adding the user, by returning the email address
+    """
+
+    room_id = get_room_id(room_name)
+    payload = {'roomId': room_id, 'personEmail': email_invite, 'isModerator': 'true'}
+    url = SPARK_URL + '/memberships'
+    header = {'content-type': 'application/json', 'authorization': SPARK_AUTH}
+    membership_response = requests.post(url, data=json.dumps(payload), headers=header, verify=False)
+    membership_json = membership_response.json()
+    try:
+        membership = membership_json['personEmail']
+    except:
+        membership = None
+    return membership
+
+
 def delete_team(team_name):
     """
     This function will delete the Spark team with the {team_name}
@@ -171,8 +195,11 @@ def post_room_message(room_name, message):
     payload = {'roomId': room_id, 'text': message}
     url = SPARK_URL + '/messages'
     header = {'content-type': 'application/json', 'authorization': SPARK_AUTH}
-    requests.post(url, data=json.dumps(payload), headers=header, verify=False)
-    print('Message posted :  ', message)
+    response = requests.post(url, data=json.dumps(payload), headers=header, verify=False)
+    response_json = response.json()
+    print('\nPrint Post Message API response: \n')
+    utils.pprint(response_json)
+    print('\nMessage posted :  ', message)
 
 
 def post_room_file(room_name, file_name, file_type, file_path):
@@ -203,5 +230,5 @@ def post_room_file(room_name, file_name, file_type, file_path):
     header = {'content-type': m.content_type, 'authorization': SPARK_AUTH}
     requests.post(url, data=m, headers=header, verify=False)
 
-    print('File posted :  ', file_path+file_name)
+    print('\nFile posted :  ', file_path+file_name)
 
