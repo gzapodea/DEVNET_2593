@@ -29,7 +29,11 @@ from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SS
 
 def main():
     """
-
+    This sample code will print info about:
+    - The Meraki Organizations this user account has access to
+    - The Meraki Networks associated with the organization
+    - The Meraki Network Devices for the network
+    - All the Meraki Clients for the network
     """
 
     # get the Meraki organizations

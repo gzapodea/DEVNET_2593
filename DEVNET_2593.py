@@ -21,7 +21,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable in
 
 from DEVNET_2593_init import MERAKI_API_KEY, MERAKI_URL
 from DEVNET_2593_init import MERAKI_ORG, MERAKI_NETWORK
-from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SSID
+from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SSID, MERAKI_LOCATION
 
 # import Spark API info
 
@@ -61,7 +61,7 @@ def main():
     # check where clients are
 
     client_status = 'out'
-    all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 600)
+    all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 30)
 
     print('\nAll Meraki Clients list ')
     utils.pprint(all_meraki_clients)
@@ -73,7 +73,7 @@ def main():
     client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_NETWORK, MERAKI_PHONE_NO)
     print('\nThe Meraki SM client with the ', MERAKI_PHONE_NO, ' location is: ', client_location)
 
-    if client_location == '23742 SW Pinehurst Dr, Sherwood, OR 97140, USA':
+    if client_location == MERAKI_LOCATION:
         print('\nClient in the office based on SM GPS location')
         client_status = 'in'
 
@@ -108,22 +108,23 @@ def main():
         if MERAKI_CLIENT_MAC in all_meraki_clients:
             new_client_status = 'in'
         client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_NETWORK, MERAKI_PHONE_NO)
-        if client_location == '23742 SW Pinehurst Dr, Sherwood, OR 97140, USA':
+        if client_location == MERAKI_LOCATION:
             new_client_status = 'in'
 
         if new_client_status != client_status:
             print('Status Change')
             if new_client_status == 'in':
                 meraki_apis.enable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
-                spark_apis.post_room_message(SPARK_ROOM, 'Welcome Gabi! The "MerakiConnect" SSID is enabled')
+                spark_apis.post_room_message(SPARK_ROOM, 'Welcome Dr. Z to your office. Have a great day!')
+                spark_apis.post_room_message(SPARK_ROOM, 'The "MerakiConnect" SSID is enabled')
                 print('\nWelcome! The "MerakiConnect" SSID is enabled')
             else:
                 meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
-                spark_apis.post_room_message(SPARK_ROOM, 'Good Bye Gabi! The "MerakiConnect" SSID is disabled')
+                spark_apis.post_room_message(SPARK_ROOM, 'Good Bye Dr. Z! The "MerakiConnect" SSID is disabled')
         print('App is running normal, client current status', new_client_status, ', client previous status',
               client_status)
         client_status = new_client_status
-        time.sleep(60)
+        time.sleep(10)
 
     # restore the stdout to initial value
     sys.stdout = initial_sys

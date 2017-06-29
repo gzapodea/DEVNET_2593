@@ -14,7 +14,7 @@ import spark_apis
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-from DEVNET_2593_init import SPARK_URL, SPARK_AUTH, SPARK_ROOM, SPARK_TEAM  # the file includes all config data required for the lab
+from DEVNET_2593_init import SPARK_URL, SPARK_AUTH, SPARK_ROOM, SPARK_TEAM, SPARK_EMAIL # the file includes all config data required for the lab
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable insecure https warnings
 
@@ -40,6 +40,15 @@ def main():
     if new_team == 'Y':
         spark_apis.create_team(SPARK_TEAM)
 
+    # check if we have the Spark team created
+    spark_team_id = None
+    spark_team_id = spark_apis.get_team_id(SPARK_TEAM)
+    if spark_team_id is None:
+        spark_team_id = spark_apis.create_team(SPARK_TEAM)
+        print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
+    spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
+    print('\nAdded membership to the team ', SPARK_TEAM)
+
     # create a new Spark Room?
 
     print('\nSpark Room to be created with the name : ', SPARK_ROOM, '\n')
@@ -47,6 +56,13 @@ def main():
     new_room = input('Do you want to create a new Spark Room ? (y/n): ').upper()
     if new_room == 'Y':
         spark_apis.create_room(SPARK_ROOM, SPARK_TEAM)
+
+    # check if we have the Spark space created
+    spark_room_id = None
+    spark_room_id = spark_apis.get_room_id(SPARK_ROOM)
+    if spark_room_id is None:
+        spark_room_id = spark_apis.create_room(SPARK_ROOM, SPARK_TEAM)
+        print('\nCreated the Spark Space with the name: ', SPARK_ROOM)
 
     # find the Spark room id for the room with the name 'SPARK_ROOM'
 
