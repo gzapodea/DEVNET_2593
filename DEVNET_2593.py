@@ -41,7 +41,7 @@ def main():
     initial_sys = sys.stdout
 
     user_input = utils.get_input_timeout('If running in Debugging Mode please enter  y ', 10)
-
+    user_input = 'n'
     # this section will determine if running the code in demo mode or logging debug to a file
 
     if user_input == 'y':
@@ -61,7 +61,7 @@ def main():
     # check where clients are
 
     client_status = 'out'
-    all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 30)
+    all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 60)
 
     print('\nAll Meraki Clients list ')
     utils.pprint(all_meraki_clients)

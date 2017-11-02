@@ -29,7 +29,11 @@ from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SS
 
 def main():
     """
-
+    This sample code will print info about:
+    - The Meraki Organizations this user account has access to
+    - The Meraki Networks associated with the organization
+    - The Meraki Network Devices for the network
+    - The GPS location for a mobile client, obtained from Meraki SM
     """
 
     # get the Meraki organizations
@@ -52,9 +56,9 @@ def main():
 
     # get the location information for a SM client matching a user input phone number
 
-    phone = input('Please input a client phone number to locate using the SM location info for '
-                         '(format 10 digits, no dashes nor spaces) : ')
-    phone_number = '+1' + phone
+    # phone = input('Please input a client phone number to locate using the SM location info for '
+    #                     '(format 10 digits, no dashes nor spaces) : ')
+    phone_number = '+1' + '5038904949'
     phone_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_NETWORK, phone_number)
     if not phone_location:
         print('\nThe client with the cell phone number ', phone_number, ' may not be located at this time')
