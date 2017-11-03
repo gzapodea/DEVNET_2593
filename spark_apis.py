@@ -77,6 +77,24 @@ def create_room(room_name, team_name):
     return room_number
 
 
+def create_room_no_team(room_name):
+    """
+    This function will create a Spark room with the name {room_name}
+    Calls to: Call to Spark - /rooms, to create the new room
+    :param room_name: Spark room name
+    :return: the Spark room id
+    """
+
+    payload = {'title': room_name}
+    url = SPARK_URL + '/rooms'
+    header = {'content-type': 'application/json', 'authorization': SPARK_AUTH}
+    room_response = requests.post(url, data=json.dumps(payload), headers=header, verify=False)
+    room_json = room_response.json()
+    room_number = room_json['id']
+    print('\nCreated Spark Room with the name: ', room_name)
+    return room_number
+
+
 def get_room_id(room_name):
     """
     This function will find the Spark room id based on the {room_name}

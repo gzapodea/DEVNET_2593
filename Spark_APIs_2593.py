@@ -34,20 +34,20 @@ def main():
 
     # create a new Spark Team?
 
-    print('\nSpark Team to be created with the name : ', SPARK_TEAM, '\n')
+    # print('\nSpark Team to be created with the name : ', SPARK_TEAM, '\n')
 
-    new_team = input('Do you want to create a new Spark Team ? (y/n): ').upper()
-    if new_team == 'Y':
-        spark_apis.create_team(SPARK_TEAM)
+    # new_team = input('Do you want to create a new Spark Team ? (y/n): ').upper()
+    # if new_team == 'Y':
+    #    spark_apis.create_team(SPARK_TEAM)
 
     # check if we have the Spark team created
-    spark_team_id = None
-    spark_team_id = spark_apis.get_team_id(SPARK_TEAM)
-    if spark_team_id is None:
-        spark_team_id = spark_apis.create_team(SPARK_TEAM)
-        print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
-    spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
-    print('\nAdded membership to the team ', SPARK_TEAM)
+    # spark_team_id = None
+    # spark_team_id = spark_apis.get_team_id(SPARK_TEAM)
+    # if spark_team_id is None:
+    #    spark_team_id = spark_apis.create_team(SPARK_TEAM)
+    #   print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
+    # spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
+    # print('\nAdded membership to the team ', SPARK_TEAM)
 
     # create a new Spark Room?
 
@@ -55,13 +55,13 @@ def main():
 
     new_room = input('Do you want to create a new Spark Room ? (y/n): ').upper()
     if new_room == 'Y':
-        spark_apis.create_room(SPARK_ROOM, SPARK_TEAM)
+        spark_apis.create_room_no_team(SPARK_ROOM)
 
     # check if we have the Spark space created
     spark_room_id = None
     spark_room_id = spark_apis.get_room_id(SPARK_ROOM)
     if spark_room_id is None:
-        spark_room_id = spark_apis.create_room(SPARK_ROOM, SPARK_TEAM)
+        spark_room_id = spark_apis.create_room_no_team(SPARK_ROOM)
         print('\nCreated the Spark Space with the name: ', SPARK_ROOM)
 
     # find the Spark room id for the room with the name 'SPARK_ROOM'
