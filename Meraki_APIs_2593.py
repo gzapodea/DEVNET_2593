@@ -1,4 +1,5 @@
-# developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
+
+# developed by Gabi Zapodeanu, TSA, GPO, Cisco Systems
 
 
 # !/usr/bin/env python3
@@ -58,7 +59,7 @@ def main():
     # past timespan value entered by user
 
     timespan = input('Time Period for which you want to get all clients MAC addresses ? '
-                     '(in seconds, less than 30 days, please enter an integer > 360000)  ')
+                     '(in seconds, less than 30 days, please enter an integer < 360000)  ')
     meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, timespan)
     utils.pprint(meraki_clients)
 

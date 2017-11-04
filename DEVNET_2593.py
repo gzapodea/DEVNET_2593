@@ -1,5 +1,5 @@
-# developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
 
+# developed by Gabi Zapodeanu, TSA, GPO, Cisco Systems
 
 # !/usr/bin/env python3
 
@@ -20,7 +20,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable in
 # import Meraki API info
 
 from DEVNET_2593_init import MERAKI_API_KEY, MERAKI_URL
-from DEVNET_2593_init import MERAKI_ORG, MERAKI_NETWORK
+from DEVNET_2593_init import MERAKI_ORG, MERAKI_NETWORK, MERAKI_SM
 from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SSID, MERAKI_LOCATION
 
 # import Spark API info
@@ -58,19 +58,32 @@ def main():
         # configure basic logging to send to stdout, level DEBUG, include timestamps
         logging.basicConfig(level=logging.DEBUG, stream=sys.stdout, format=('%(asctime)s - %(levelname)s - %(message)s'))
 
-    # check where clients are
+    # check if we have the Spark space created
 
-    client_status = 'out'
-    all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 60)
+    spark_room_id = None
+    spark_room_id = spark_apis.get_room_id(SPARK_ROOM)
+    if spark_room_id is None:
+        spark_room_id = spark_apis.create_room_no_team(SPARK_ROOM)
+        print('\nCreated the Spark Room with the name: ', SPARK_ROOM)
+    else:
+        print('\nFound Spark room with the name: ', SPARK_ROOM)
+
+    # check where clients are, initial run of the code
+
+    client_status = 'Unknown'
+    all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 300)
 
     print('\nAll Meraki Clients list ')
     utils.pprint(all_meraki_clients)
 
     if MERAKI_CLIENT_MAC in all_meraki_clients:
-        print('\nClient in the office connected to Wifi')
+        print('\nClient in the office connected to Wi-Fi')
         client_status = 'in'
+    else:
+        print('\nClient not connected to Wi-Fi')
+        client_status = 'out'
 
-    client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_NETWORK, MERAKI_PHONE_NO)
+    client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_SM, MERAKI_PHONE_NO)
     print('\nThe Meraki SM client with the ', MERAKI_PHONE_NO, ' location is: ', client_location)
 
     if client_location == MERAKI_LOCATION:
@@ -85,29 +98,23 @@ def main():
         print('\nThe "MerakiConnect" SSID is disabled')
 
     # check if we have the Spark team created
-    spark_team_id = None
-    spark_team_id = spark_apis.get_team_id(SPARK_TEAM)
-    if spark_team_id is None:
-        spark_team_id = spark_apis.create_team(SPARK_TEAM)
-        print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
-    spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
-    print('\nAdded membership to the team ', SPARK_TEAM)
+    # spark_team_id = None
+    # spark_team_id = spark_apis.get_team_id(SPARK_TEAM)
+    # if spark_team_id is None:
+    #    spark_team_id = spark_apis.create_team(SPARK_TEAM)
+    #    print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
+    # spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
+    # print('\nAdded membership to the team ', SPARK_TEAM)
 
-    # check if we have the Spark space created
-    spark_room_id = None
-    spark_room_id = spark_apis.get_room_id(SPARK_ROOM)
-    if spark_room_id is None:
-        spark_room_id = spark_apis.create_room(SPARK_ROOM, SPARK_TEAM)
-        print('\nCreated the Spark Space with the name: ', SPARK_ROOM)
 
     # infinite loop to check client status every minute
 
     while True:
         new_client_status = 'out'
-        all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 60)
+        all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 300)
         if MERAKI_CLIENT_MAC in all_meraki_clients:
             new_client_status = 'in'
-        client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_NETWORK, MERAKI_PHONE_NO)
+        client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_SM, MERAKI_PHONE_NO)
         if client_location == MERAKI_LOCATION:
             new_client_status = 'in'
 

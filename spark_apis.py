@@ -1,5 +1,5 @@
 
-# developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
+# developed by Gabi Zapodeanu, TSA, GPO, Cisco Systems
 
 # this module includes common utilized functions to create applications using Spark APIs
 
@@ -91,7 +91,6 @@ def create_room_no_team(room_name):
     room_response = requests.post(url, data=json.dumps(payload), headers=header, verify=False)
     room_json = room_response.json()
     room_number = room_json['id']
-    print('\nCreated Spark Room with the name: ', room_name)
     return room_number
 
 
@@ -215,7 +214,7 @@ def post_room_message(room_name, message):
     header = {'content-type': 'application/json', 'authorization': SPARK_AUTH}
     response = requests.post(url, data=json.dumps(payload), headers=header, verify=False)
     response_json = response.json()
-    print('\nPrint Post Message API response: \n')
+    print('\nPost Message API Call response: \n')
     utils.pprint(response_json)
     print('\nMessage posted :  ', message)
 

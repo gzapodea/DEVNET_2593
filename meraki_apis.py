@@ -1,4 +1,5 @@
-# developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
+
+# developed by Gabi Zapodeanu, TSA, GPO, Cisco Systems
 
 # !/usr/bin/env python3
 
@@ -194,7 +195,7 @@ def get_user_cell(users_info, user_email):
 
 def get_location_cell(org_name, netw_name, user_cell):
     """
-    This function will locate the user based on his cell phone number. This use belongs to the specified
+    This function will locate the user based on his cell phone number. This user belongs to the specified
     Meraki Organization and Network
     :param org_name: Meraki organization name
     :param netw_name: Meraki network name

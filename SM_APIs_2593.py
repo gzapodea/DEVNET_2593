@@ -1,5 +1,6 @@
-# developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
 
+
+# developed by Gabi Zapodeanu, TSA, GPO, Cisco Systems
 
 # !/usr/bin/env python3
 
@@ -23,7 +24,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Disable in
 # import Meraki API info
 
 from DEVNET_2593_init import MERAKI_API_KEY, MERAKI_URL
-from DEVNET_2593_init import MERAKI_ORG, MERAKI_NETWORK
+from DEVNET_2593_init import MERAKI_ORG, MERAKI_NETWORK, MERAKI_SM
 from DEVNET_2593_init import MERAKI_CLIENT_MAC, MERAKI_PHONE_NO, MERAKI_GUEST_SSID
 
 
@@ -50,8 +51,8 @@ def main():
 
     # get the Meraki SM Clients for the network with the info: "MERAKI_ORG", "MERAKI_NETWORK"
 
-    meraki_client_devices = meraki_apis.get_sm_devices(MERAKI_ORG, MERAKI_NETWORK)
-    print('\nThe Meraki SM Client Devices for the network with the name ', MERAKI_NETWORK, ':\n')
+    meraki_client_devices = meraki_apis.get_sm_devices(MERAKI_ORG, MERAKI_SM)
+    print('\nThe Meraki SM Client Devices for the network with the name ', MERAKI_SM, ':\n')
     utils.pprint(meraki_client_devices)
 
     # get the location information for a SM client matching a user input phone number
@@ -59,7 +60,7 @@ def main():
     # phone = input('Please input a client phone number to locate using the SM location info for '
     #                     '(format 10 digits, no dashes nor spaces) : ')
     phone_number = '+1' + '5038904949'
-    phone_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_NETWORK, phone_number)
+    phone_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_SM, phone_number)
     if not phone_location:
         print('\nThe client with the cell phone number ', phone_number, ' may not be located at this time')
     else:

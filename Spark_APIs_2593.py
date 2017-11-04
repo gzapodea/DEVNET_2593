@@ -1,4 +1,5 @@
-# developed by Gabi Zapodeanu, TSA, GSS, Cisco Systems
+
+# developed by Gabi Zapodeanu, TSA, GPO, Cisco Systems
 
 # !/usr/bin/env python3
 
@@ -23,31 +24,14 @@ def main():
     """
     Spark Accounts are required for this demo.
     Attendees will need to register to ciscospark.com if they do not have an account already.
-    This lab module will ask users to create a team, a space, invite a new member to the space.
-    The code will retrieve the space Spark Id and post a message to the space.
+    This lab module will ask users to create a room, invite a new member to the room.
+    The code will retrieve the Spark Room Id and post a message to the room.
     Only some functions will be used. The other functions are provided as a reference.
     Few Python modules will be required:
     - utils.py
     - spark_apis.py
     - DEVNET_2593_init.py
     """
-
-    # create a new Spark Team?
-
-    # print('\nSpark Team to be created with the name : ', SPARK_TEAM, '\n')
-
-    # new_team = input('Do you want to create a new Spark Team ? (y/n): ').upper()
-    # if new_team == 'Y':
-    #    spark_apis.create_team(SPARK_TEAM)
-
-    # check if we have the Spark team created
-    # spark_team_id = None
-    # spark_team_id = spark_apis.get_team_id(SPARK_TEAM)
-    # if spark_team_id is None:
-    #    spark_team_id = spark_apis.create_team(SPARK_TEAM)
-    #   print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
-    # spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
-    # print('\nAdded membership to the team ', SPARK_TEAM)
 
     # create a new Spark Room?
 
@@ -57,22 +41,22 @@ def main():
     if new_room == 'Y':
         spark_apis.create_room_no_team(SPARK_ROOM)
 
-    # check if we have the Spark space created
+    # check if we have the Spark room created
+
     spark_room_id = None
     spark_room_id = spark_apis.get_room_id(SPARK_ROOM)
     if spark_room_id is None:
         spark_room_id = spark_apis.create_room_no_team(SPARK_ROOM)
-        print('\nCreated the Spark Space with the name: ', SPARK_ROOM)
+        print('\nWe did not find the room, created the Spark Room with the name: ', SPARK_ROOM)
 
-    # find the Spark room id for the room with the name 'SPARK_ROOM'
-
-    devnet_room_id = spark_apis.get_room_id(SPARK_ROOM)
-    print('\nThe Spark room id for the room with the name ', SPARK_ROOM, ' is: ', devnet_room_id, '\n')
+    print('\nThe Spark room id for the room with the name ', SPARK_ROOM, ' is: ', spark_room_id, '\n')
 
     # ask the user to invite somebody to the Spark room
 
-    membership_email = input('Enter an email address to invite user to your Spark room : ')
-    spark_apis.add_room_membership(SPARK_ROOM, membership_email)
+    new_membership = input('Do you want to invite a new Member to the Spark Room ? (y/n): ').upper()
+    if new_membership == 'Y':
+        membership_email = input('Enter an email address to invite user to your Spark room : ')
+        spark_apis.add_room_membership(SPARK_ROOM, membership_email)new_membership
 
     # ask user to input a message to be posted in the room
 
