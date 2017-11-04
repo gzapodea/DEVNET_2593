@@ -69,8 +69,9 @@ def main():
         print('\nFound Spark room with the name: ', SPARK_ROOM)
 
     # check where clients are, initial run of the code
+    # check the location based on Wi-Fi association
 
-    client_status = 'Unknown'
+    client_status = 'out'
     all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 300)
 
     print('\nAll Meraki Clients list ')
@@ -83,44 +84,68 @@ def main():
         print('\nClient not connected to Wi-Fi')
         client_status = 'out'
 
+    # check location based on the GPS location from SM
+
+    client_sm_status = 'out'
+
     client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_SM, MERAKI_PHONE_NO)
     print('\nThe Meraki SM client with the ', MERAKI_PHONE_NO, ' location is: ', client_location)
 
     if client_location == MERAKI_LOCATION:
         print('\nClient in the office based on SM GPS location')
-        client_status = 'in'
+        client_sm_status = 'in'
+    else:
+        print('\nClient not in the office based on SM GPS location')
+        client_sm_status = 'out'
 
-    if client_status == 'in':
+    # define initial state of the Guest SSID based on client status
+
+    if client_status == 'out':
+        if client_sm_status == 'out':
+            meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
+            print('\nThe "MerakiConnect" SSID is disabled')
+            ssid_status = 'off'
+    else:
         meraki_apis.enable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
         print('\nThe "MerakiConnect" SSID is enabled')
-    else:
-        meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
-        print('\nThe "MerakiConnect" SSID is disabled')
-
-    # check if we have the Spark team created
-    # spark_team_id = None
-    # spark_team_id = spark_apis.get_team_id(SPARK_TEAM)
-    # if spark_team_id is None:
-    #    spark_team_id = spark_apis.create_team(SPARK_TEAM)
-    #    print('\nCreated the Spark Team with the name: ', SPARK_TEAM)
-    # spark_apis.add_team_membership(SPARK_TEAM, SPARK_EMAIL)
-    # print('\nAdded membership to the team ', SPARK_TEAM)
-
+        ssid_status = 'on'
 
     # infinite loop to check client status every minute
 
     while True:
-        new_client_status = 'out'
+        previous_ssid_status = str(ssid_status)
+
+        # check the location based on Wi-Fi association
+
         all_meraki_clients = meraki_apis.get_all_mac_clients(MERAKI_ORG, MERAKI_NETWORK, 300)
         if MERAKI_CLIENT_MAC in all_meraki_clients:
-            new_client_status = 'in'
-        client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_SM, MERAKI_PHONE_NO)
-        if client_location == MERAKI_LOCATION:
-            new_client_status = 'in'
+            client_status = 'in'
+        else:
+            client_status = 'out'
 
-        if new_client_status != client_status:
+        # check location based on the GPS location from SM
+
+        client_location = meraki_apis.get_location_cell(MERAKI_ORG, MERAKI_SM, MERAKI_PHONE_NO)
+
+        if client_location == MERAKI_LOCATION:
+            client_sm_status = 'in'
+        else:
+            client_sm_status = 'out'
+
+        if client_status == 'out':
+            if client_sm_status == 'out':
+                meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
+                print('\nThe "MerakiConnect" SSID is disabled')
+                ssid_status = 'off'
+        else:
+            meraki_apis.enable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
+            print('\nThe "MerakiConnect" SSID is enabled')
+            ssid_status = 'on'
+
+
+        if ssid_status != previous_ssid_status:
             print('Status Change')
-            if new_client_status == 'in':
+            if ssid_status == 'on':
                 meraki_apis.enable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
                 spark_apis.post_room_message(SPARK_ROOM, 'Welcome Dr. Z to your office. Have a great day!')
                 spark_apis.post_room_message(SPARK_ROOM, 'The "MerakiConnect" SSID is enabled')
@@ -128,10 +153,12 @@ def main():
             else:
                 meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
                 spark_apis.post_room_message(SPARK_ROOM, 'Good Bye Dr. Z! The "MerakiConnect" SSID is disabled')
-        print('App is running normal, client current status', new_client_status, ', client previous status',
-              client_status)
-        client_status = new_client_status
-        time.sleep(10)
+
+        print('App is running normal, Guest SSID current status', ssid_status, ', Guest SSID previous status',
+              previous_ssid_status)
+        previous_ssid_status = ssid_status
+
+        time.sleep(10)  # repeat every 10 seconds
 
     # restore the stdout to initial value
     sys.stdout = initial_sys
