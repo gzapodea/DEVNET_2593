@@ -56,7 +56,7 @@ def main():
     new_membership = input('Do you want to invite a new Member to the Spark Room ? (y/n): ').upper()
     if new_membership == 'Y':
         membership_email = input('Enter an email address to invite user to your Spark room : ')
-        spark_apis.add_room_membership(SPARK_ROOM, membership_email)new_membership
+        spark_apis.add_room_membership(SPARK_ROOM, membership_email)
 
     # ask user to input a message to be posted in the room
 

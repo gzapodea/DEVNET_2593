@@ -135,11 +135,11 @@ def main():
         if client_status == 'out':
             if client_sm_status == 'out':
                 meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
-                print('\nThe "MerakiConnect" SSID is disabled')
+                # print('\nThe "MerakiConnect" SSID is disabled')
                 ssid_status = 'off'
         else:
             meraki_apis.enable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
-            print('\nThe "MerakiConnect" SSID is enabled')
+            # print('\nThe "MerakiConnect" SSID is enabled')
             ssid_status = 'on'
 
 
@@ -148,14 +148,14 @@ def main():
             if ssid_status == 'on':
                 meraki_apis.enable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
                 spark_apis.post_room_message(SPARK_ROOM, 'Welcome Dr. Z to your office. Have a great day!')
-                spark_apis.post_room_message(SPARK_ROOM, 'The "MerakiConnect" SSID is enabled')
+                spark_apis.post_room_message(SPARK_ROOM, 'The "MerakiConnect" Network is enabled')
                 print('\nWelcome! The "MerakiConnect" SSID is enabled')
             else:
                 meraki_apis.disable_ssid(MERAKI_ORG, MERAKI_NETWORK, MERAKI_GUEST_SSID)
                 spark_apis.post_room_message(SPARK_ROOM, 'Good Bye Dr. Z! The "MerakiConnect" SSID is disabled')
 
-        print('App is running normal, Guest SSID current status', ssid_status, ', Guest SSID previous status',
-              previous_ssid_status)
+        # print('App is running normal, Guest SSID current status', ssid_status, ', Guest Network previous status',
+        #      previous_ssid_status)
         previous_ssid_status = ssid_status
 
         time.sleep(10)  # repeat every 10 seconds

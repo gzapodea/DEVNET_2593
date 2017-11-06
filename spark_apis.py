@@ -214,9 +214,9 @@ def post_room_message(room_name, message):
     header = {'content-type': 'application/json', 'authorization': SPARK_AUTH}
     response = requests.post(url, data=json.dumps(payload), headers=header, verify=False)
     response_json = response.json()
-    print('\nPost Message API Call response: \n')
+    # print('\nPost Message API Call response: \n')
     utils.pprint(response_json)
-    print('\nMessage posted :  ', message)
+    # print('\nMessage posted :  ', message)
 
 
 def post_room_file(room_name, file_name, file_type, file_path):
