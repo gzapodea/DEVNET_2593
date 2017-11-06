@@ -20,7 +20,7 @@ MERAKI_URL = 'https://dashboard.meraki.com/api/v0'
 MERAKI_ORG = 'Meraki Organization name'
 MERAKI_NETWORK = 'APIsDemo'
 MERAKI_DEVICE_SN = 'Meraki device SN'
-MERAKI_CLIENT_MAC = '78:a3:e4:f1:de:f2'
+MERAKI_CLIENT_MAC = 'xx:xx:xx:xx:xx:xx'
 MERAKI_PHONE_NO = 'Meraki SM Client phone number'
 MERAKI_GUEST_SSID = 'MerakiConnect'
 
